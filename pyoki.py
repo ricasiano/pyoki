@@ -10,6 +10,8 @@ import json
 from subprocess import Popen
 from subprocess import call
 from pyoki_lib import pyokiStyles, pyokiPlay, pyokiList
+from pycdg_lib import pycdg, pykmanager
+#from pykmanager import manager
 styles = pyokiStyles.Header()
 myplay = pyokiPlay.Play()
 mylist = pyokiList.List()
@@ -38,9 +40,12 @@ class WSHandler(tornado.websocket.WebSocketHandler):
       print('Please wait while we prepare your video...')
       mysong = myplay.song(songid[1])
       print('Title:'+mysong['name'] + ' File:' + mysong['file'])
-      Popen(["omxplayer", "/home/py/pyoki_videos/1.mp4"], stdout=FNULL, stderr=FNULL)
+      player = pycdg.cdgPlayer("/home/rai/karaoke/import/"+mysong['file'])
+      player.Play()
+      manager.WaitForPlayer()
+      #Popen(["omxplayer", "/home/py/pyoki_videos/1.mp4"], stdout=FNULL, stderr=FNULL)
     elif message=='STOP':
-      Popen(["killall", "-9", "omxplayer.bin"], stdout=FNULL, stderr=FNULL)
+      #Popen(["killall", "-9", "omxplayer.bin"], stdout=FNULL, stderr=FNULL)
       self.write_message("OK")
     elif message=='OFF':
       self.write_message("OK")
