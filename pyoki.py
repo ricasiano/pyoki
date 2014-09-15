@@ -38,7 +38,9 @@ class WSHandler(tornado.websocket.WebSocketHandler):
       print('Please wait while we prepare your video...')
       mysong = myplay.song(songid[1])
       print('Title:'+mysong['name'] + ' File:' + mysong['file'])
-      Popen(["omxplayer", "/home/py/pyoki_videos/1.mp4"], stdout=FNULL, stderr=FNULL)
+      Popen(["killall", "-9", "omxplayer.bin"], stdout=FNULL, stderr=FNULL)
+      os.system('clear')
+      Popen(["omxplayer", "/home/pi/pyoki_videos/" + mysong['file']], stdout=FNULL, stderr=FNULL)
     elif message=='STOP':
       Popen(["killall", "-9", "omxplayer.bin"], stdout=FNULL, stderr=FNULL)
       self.write_message("OK")

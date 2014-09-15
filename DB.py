@@ -1,5 +1,5 @@
 import sqlite3 as sql
-con = sql.connect('Pyoki.db')
+con = sql.connect('/home/pi/pyoki/Pyoki.db')
 
 class DBConnect:
   def getOne(self, query, id):
