@@ -24,7 +24,6 @@ class WSHandler(tornado.websocket.WebSocketHandler):
   def open(self):
     styles.title()
     print('We have found your device! You may now navigate for songs via App.')
-    self.write_message("OK")
   def on_message(self, message):
     styles.title()
     if message=='LIST':
@@ -35,13 +34,19 @@ class WSHandler(tornado.websocket.WebSocketHandler):
       myartists = mylist.artists()
       data = json.dumps(myartists)
       self.write_message(data)
+    elif 'SONGS' in message:
+      artistid = message.split(' ')
+      print('Listing all songs' + artistid[1])
+      mysongs = mylist.artistSongs(artistid[1])
+      data = json.dumps(mysongs)
+      self.write_message(data)
     elif 'PLAY' in message:
       self.write_message("OK")
       songid = message.split(' ')
-      print('Please wait while we prepare your video...')
+      print('Preparing your song. Please Wait...')
       mysong = myplay.song(songid[1])
       print('Title:'+mysong['name'] + ' File:' + mysong['file'])
-      player = pycdg.cdgPlayer("/home/rai/karaoke/import/"+mysong['file'])
+      player = pycdg.cdgPlayer("/media/NASDRIVE/"+mysong['file'])
       player.Play()
       manager.WaitForPlayer()
       #Popen(["omxplayer", "/home/py/pyoki_videos/1.mp4"], stdout=FNULL, stderr=FNULL)
