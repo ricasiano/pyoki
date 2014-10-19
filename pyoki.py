@@ -36,7 +36,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
       self.write_message(data)
     elif 'SONGS' in message:
       artistid = message.split(' ')
-      print('Listing all songs' + artistid[1])
+      print('Listing all songs')
       mysongs = mylist.artistSongs(artistid[1])
       data = json.dumps(mysongs)
       self.write_message(data)
@@ -46,12 +46,14 @@ class WSHandler(tornado.websocket.WebSocketHandler):
       print('Preparing your song. Please Wait...')
       mysong = myplay.song(songid[1])
       print('Title:'+mysong['name'] + ' File:' + mysong['file'])
-      player = pycdg.cdgPlayer("/media/NASDRIVE/"+mysong['file'])
-      player.Play()
-      manager.WaitForPlayer()
+      #Pplayer = pycdg.cdgPlayer("/media/NASDRIVE/"+mysong['file'], playErrorCallback, playFinishedCallback)
+      #Pplayer.Play()
+      #Pmanager.WaitForPlayer()
+      Popen(["pycdg", "/media/NASDRIVE/"+mysong['file']], stdout=FNULL, stderr=FNULL)
       #Popen(["omxplayer", "/home/py/pyoki_videos/1.mp4"], stdout=FNULL, stderr=FNULL)
     elif message=='STOP':
       #Popen(["killall", "-9", "omxplayer.bin"], stdout=FNULL, stderr=FNULL)
+      Popen(["killall", "-9", "pycdg"], stdout=FNULL, stderr=FNULL)
       self.write_message("OK")
     elif message=='OFF':
       self.write_message("OK")
